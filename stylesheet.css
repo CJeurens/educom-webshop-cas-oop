@@ -1,0 +1,136 @@
+body 
+{
+    margin: 0%;
+    font-size: 14px;
+    font-family: dubai;
+    color: whitesmoke;
+    background-color: lightslategrey;
+}
+
+.pagetop
+{
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+header 
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(58, 106, 157);
+    min-height: 36px;
+    text-align: center;
+}
+
+footer 
+{
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    color: white;
+    background-color: black;
+    font-size: 8px;
+    text-align: right;
+}
+
+.navbar
+{
+    background-color: rgb(255, 255, 255);
+    width: 100%;
+}
+
+ul.nav 
+{
+    list-style-type: none;
+    margin: 0;
+    text-decoration: none;
+    color:rgb(58, 106, 157);
+}
+
+a
+{
+    text-decoration: none;
+}
+
+li 
+{
+    display: inline;
+}
+
+.content
+{
+    margin-top: 120px;
+    margin-bottom: 38px;
+    margin-left: 24px;
+    margin-right: 24px;
+}
+
+input.contact 
+{
+    width: 260px;
+}
+
+.error 
+{
+    color: red;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+div.form
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 225px;
+}
+
+table
+{
+    padding: 18px;
+    background-color: #919faa;
+}
+
+span.account
+{
+    color:blue;
+    position:fixed;
+    right:0;
+}
+
+select
+{
+    height: 42px;
+    width: 128px;
+    background-color: black;
+    border: 0.2rem solid #5A9EA5;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.flex-container
+{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+}
+
+.product
+{
+    padding: 24px;
+}
+
+.cart
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form
+{
+    text-align: right;
+}
