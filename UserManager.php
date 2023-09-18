@@ -2,53 +2,70 @@
 
 class UserManager
 {
-    public function getUserInfo($sql)
+    public $errors;
+
+    public function __construct($val_data)
     {
-        $this->sql = $sql;
-        
-        return $this->connect();
+        $this->val_data = $val_data;
     }
 
-    public function executeQuery($conn)
+    public function loginChecker()
     {
-        $stmt = $conn->prepare($this->sql);
-        $stmt->execute();
-        $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-
-        foreach ($stmt->fetchAll() as $values)
+        if($this->val_data["email"]["valid"] && $this->val_data["password"]["valid"])
         {
-            $info = $values;
-            return $info;
-        };
+            require_once "Crud.php";
+            $crud = new Crud;
+            if($user = $crud->getUserByEmail($this->val_data["email"]["value"]))
+            {
+                if(strcmp($this->val_data["password"]["value"],$user["password"]) == 0)
+                {
+                    return $user["username"];
+                }
+                else
+                {
+                    $this->errors["password"] = "Incorrect password";
+                    return FALSE;
+                }
+            }
+            else
+            {
+                $this->errors["email"] = "E-mail not registered";
+                return FALSE;
+            }
+        }
     }
 
-    public function connect()
+    public function registerChecker()
     {
-        require_once "\config\Settings.php"; //plaats boven root
-        $servername = Settings::SERVER_NAME;
-        $username = Settings::SERVER_USER;
-        $password = Settings::SERVER_PASS;
-        $database = "users";
-
-        try
+        if($this->val_data["email"]["valid"] && 
+        $this->val_data["password"]["valid"] && 
+        $this->val_data["username"]["valid"])
         {
-            $conn = new PDO
-            (
-                "mysql:host=$servername;
-                dbname=$database",
-                $username,
-                $password
-            );
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $return = $this->executeQuery($conn);
+            require_once "Crud.php";
+            $crud = new Crud;
+            if($user = $crud->getUserByEmail($this->val_data["email"]["value"]))
+            {
+                $this->errors["email"] = "E-mail already registered";
+                return FALSE;
+            }
+            else
+            {
+                if(strcmp($this->val_data["password"]["value"],$this->val_data["rpassword"]["value"]) == 0)
+                {
+                    $crud->writeUserToDb(
+                        $this->val_data["email"]["value"],
+                        $this->val_data["username"]["value"],
+                        $this->val_data["password"]["value"]
+                    );
+                    return $this->val_data["username"]["value"];
+                }
+                else
+                {
+                    $this->errors["rpassword"] = "Incorrect repeat password";
+                    return FALSE;
+                }
+            }
         }
-        catch(PDOException $e)
-        {
-            print "Error: " . $e->getMessage();
-        }
-
-        $conn = NULL;
-        return $return;
     }
 }
 

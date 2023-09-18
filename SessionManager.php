@@ -6,6 +6,11 @@ class SessionManager
     {
         $_SESSION["userID"] = $username;
     }
+
+    public function doLogoutSession()
+    {
+        $_SESSION["userID"] = "";
+    }
 }
 
 ?>

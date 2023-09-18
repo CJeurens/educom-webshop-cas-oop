@@ -41,9 +41,8 @@ class PageController
                     $san_data = $post->retrieve();
 
                     require_once "Validator.php";
-                    $validate = new Validator($san_data);
-                    $validate->validate();
-                    $this->val_data = Validator::$val_data;
+                    $validate = new Validator($san_data);   //valid of invalid
+                    $this->val_data = $validate->validate();
                     break;
 
                 case "login":
@@ -56,14 +55,28 @@ class PageController
                     $post = new PostRetriever($fields, $sanitize);
                     $san_data = $post->retrieve();
 
-                    require_once "LoginValidator.php";
-                    $validate = new LoginValidator($san_data);
-                    $username = $validate->validate();
-                    $this->val_data = Validator::$val_data;
+                    require_once "Validator.php";
+                    $validate = new Validator($san_data);
+                    $this->val_data = $validate->validate();
 
-                    require_once "Session.php";
-                    $session = new Session;
+                    require_once "UserManager.php";
+                    $user = new UserManager($this->val_data);
+                    $username = $user->loginChecker();
+                    $username = empty($username) ? "" : $username;
+                    foreach ($this->val_data as $key => $value)
+                    {
+                        if(isset($user->errors[$key]))
+                        {
+                            $this->val_data[$key]["error"] = $user->errors[$key];
+                        }
+                    }
+
+                    require_once "SessionManager.php";
+                    $session = new SessionManager;
                     $session->doLoginSession($username);
+
+                    //$this->request['page'] = "home";
+                    //$this->request = $_SESSION["prev_page"];
 
                     //redirect
                     break;
@@ -78,14 +91,34 @@ class PageController
                     $post = new PostRetriever($fields, $sanitize);
                     $san_data = $post->retrieve();
 
-                    require_once "RegisterValidator.php";
-                    $validate = new RegisterValidator($san_data);
-                    $this->val_data = $validate->fields;
-                    $validate->validate();
+                    require_once "Validator.php";
+                    $validate = new Validator($san_data);
+                    $this->val_data = $validate->validate();
 
-                    //write user to db
-                    //userlogin
+                    require_once "UserManager.php";
+                    $user = new UserManager($this->val_data);
+                    $username = $user->registerChecker();
+                    $username = empty($username) ? "" : $username;
+                    foreach ($this->val_data as $key => $value)
+                    {
+                        if(isset($user->errors[$key]))
+                        {
+                            $this->val_data[$key]["error"] = $user->errors[$key];
+                        }
+                    }
+
+                    require_once "SessionManager.php";
+                    $session = new SessionManager;
+                    $session->doLoginSession($username);
+
                     //redirect
+                    break;
+                case "logout":
+                    $this->request['page'] = ($this->getRequestVar("page", FALSE, "home") == "cart") ? "home" : $this->getRequestVar("page", FALSE, "home");
+
+                    require_once "SessionManager.php";
+                    $session = new SessionManager;
+                    $session->doLogoutSession();
                     break;
             }
         }
@@ -119,6 +152,8 @@ class PageController
             $view = new PageView;
             $view->displayPage($content);
         }
+
+        $_SESSION["prev_page"]=$_GET;
     }
     
     private function getRequestVar(string $key, bool $frompost, $default="", bool $asnumber=FALSE)

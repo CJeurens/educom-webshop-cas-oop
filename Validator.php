@@ -2,32 +2,24 @@
 
 class Validator
 {
-
-    public static $val_data;
-
     public function __construct($data)
     {
         $this->data = $data;
     }
 
-    public function addValidation($field, $fields)
+    public function validateEmail($field)
     {
         if (array_key_exists("email",$field))
         {
-            $field = $this->validateEmail($field);
-        }
-        return $field;
-    }
-
-    public function validateEmail($field)
-    {
-        if (!filter_var($field["email"]["value"],FILTER_VALIDATE_EMAIL))
-        {
-            $field["email"]["error"] = "Invalid e-mail";
-        }
-        else
-        {
-            $field["email"]["valid"] = TRUE;
+            $field["email"]["valid"] = FALSE;
+            if (!filter_var($field["email"]["value"],FILTER_VALIDATE_EMAIL))
+            {
+                $field["email"]["error"] = "Invalid e-mail";
+            }
+            else
+            {
+                $field["email"]["valid"] = TRUE;
+            }
         }
         return $field;
     }
@@ -48,17 +40,12 @@ class Validator
             }
             else
             {
-                $field = $this->addValidation($field, $fields);
+                $field = $this->validateEmail($field);
+                $field[$key]["valid"] = TRUE;
             }
             $fields = array_merge($fields,$field);
         }
-
-        self::$val_data = $fields;
-
-        if(!empty($fields["email"]["valid"]) && !empty($fields["password"]["valid"]))
-        {
-            return $this->user_info["username"];
-        }
+        return $fields;
     }
 }
 

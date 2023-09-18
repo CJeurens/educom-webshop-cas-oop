@@ -93,7 +93,7 @@ class FormDoc extends AppDoc
 "                    <td style='text-align:left'><input type=".$field["type"]." name=".$field["name"]." value=".$field["value"]."></td>";
                 }
                 print PHP_EOL.
-"                    <td><span class=error>".$field["error"] = isset($field["error"]) ? $field["error"] : ""."</span></td>
+"                    <td><span class=error>".$field["error"] = isset($field["error"]) ? $field["error"] : ''."</span></td>
                 </tr>";
             }       
     }

@@ -15,7 +15,6 @@ class PageModel
         $author = "Cas Jeurens";
         $session = $_SESSION;
         $content = array();
-        var_dump($request);
 
         switch ($request["page"])
         {
