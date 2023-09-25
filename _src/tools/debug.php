@@ -1,8 +1,8 @@
 <?php
 
-function dump($data)
+function dump($dump, $title = "DEBUG")
 {
-    $data = array($data);
+    $data[] = [$title=>$dump];
     $GLOBALS["debug_data"] = array_merge($GLOBALS["debug_data"],$data);
 }
 
@@ -20,13 +20,16 @@ function pre()
 
 function msg($data)
 {
-    foreach($data as $value)
+    foreach($data as $dump)
     {
-        print "============DEBUG============
-        ".PHP_EOL;
-        print_r($value);
-        print "
-        ".PHP_EOL;
+        foreach($dump as $title=>$value)
+        {
+            print "============$title============
+            ".PHP_EOL;
+            print_r($value);
+            print "
+            ".PHP_EOL;
+        }
     }
 
 }

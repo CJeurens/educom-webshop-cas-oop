@@ -105,6 +105,20 @@ class PageController
                     $session = new SessionManager;
                     $session->doLogoutSession();
                     break;
+                case "shop":    //
+                    $fields = array("id", "units");
+                    $cart_input = $post->retrieve($fields);
+                    $userID = $_SESSION["userID"];
+                    $id = $cart_input["id"]["value"];
+                    $units = $cart_input["units"]["value"];
+                    $_SESSION["cart"][$userID][$id] = array("id"=>$id,"units"=>$units);
+                    break;
+                case "cart":
+                    $fields = array("remove");
+                    $remove = $post->retrieve($fields);
+                    $userID = $_SESSION["userID"];
+                    unset($_SESSION["cart"][$userID][$remove["remove"]["value"]]);
+                    break;
             }
 
         }
@@ -141,6 +155,7 @@ class PageController
 
         if ($content)
         {
+            dump($content["session"],"session");
             require_once "_src/views/PageView.php";
             $view = new PageView;
             $view->displayPage($content);

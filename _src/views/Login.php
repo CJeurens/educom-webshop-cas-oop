@@ -12,7 +12,7 @@ class Login
         {
             print "Welcome ".$this->user["userID"]."!
             <input type='hidden' value='logout' form='logout' name='page'>";
-            //showShoppingCart();
+            print "<a href='?page=cart'>".htmlspecialchars('🛒')."</a>";
             print "<button type='submit'> Log out </button>
             ";
         }

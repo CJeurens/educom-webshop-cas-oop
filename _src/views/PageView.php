@@ -20,6 +20,14 @@ class PageView
                 require_once "_src/views/GridDoc.php";
                 $view = new GridDoc($content);
                 break;
+            case "detail":
+                require_once "_src/views/DetailDoc.php";
+                $view = new DetailDoc($content);
+                break;
+            case "cart":
+                require_once "_src/views/CartDoc.php";
+                $view = new CartDoc($content);
+                break;
         }
         if (empty($view))
         {

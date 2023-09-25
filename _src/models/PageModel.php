@@ -4,7 +4,6 @@ class PageModel
 {
     public function getPageContent($request)
     {
-
         $navlinks = array(
             "home"      => "🏠HOME",         //"link address" => "link display name"
             "about"     => "ℹ️ABOUT",
@@ -200,6 +199,34 @@ class PageModel
                     "author"    => $author,
                     "type"      => "grid",
                     "items"     => $products
+                );
+                break;
+            case "detail":
+                require_once "_src/dal/ShopManager.php";
+                $shop = new ShopManager;
+                [$product] = $shop->getProduct($_GET["product"]);        //TODO: vervang GET
+                dump($_GET);
+                dump($product);
+                $content = array(
+                    "title"     => $product["name"],
+                    "header"    => "🛍️DIT IS DE SHOP",
+                    "navlinks"  => $navlinks,
+                    "session"   => $session,
+                    "author"    => $author,
+                    "type"      => "detail",
+                    "item"      => $product
+                );
+                break;
+            case "cart":
+                require_once "_src/dal/ShopManager.php";
+                $shop = new ShopManager;
+                $content = array(
+                    "title"     => "🛒YOUR CART",
+                    "header"    => "🛒YOUR CART",
+                    "navlinks"  => $navlinks,
+                    "session"   => $session,
+                    "author"    => $author,
+                    "type"      => "cart"
                 );
                 break;
 

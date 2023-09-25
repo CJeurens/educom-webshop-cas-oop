@@ -24,7 +24,7 @@ class GridDoc extends AppDoc
                 {
                     print   "
                     <div class=item>
-                        <a href='?page=shop&product=".$item["id"]."'>
+                        <a href='?page=detail&product=".$item["id"]."'>
                         <img src=assets/".$item["imgurl"]." width='94' height='94'><br>
                         ".$item["name"]."</a><br>
                         ".htmlspecialchars('€').$item["unitprice"]. "
